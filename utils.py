@@ -6,9 +6,11 @@ def get_birthdays_per_week(users):
     today = datetime.today().date()
     birthdays = defaultdict(list)
 
-    for user in users:
-        name = user["name"]
-        birthday = user["birthday"].date()
+    for user in users.values():
+        name = user.name
+        if user.birthday is None:
+            continue
+        birthday = datetime.strptime(user.birthday.value, "%d.%m.%Y").date()
         birthday_this_year = birthday.replace(year=today.year)
 
         if birthday_this_year < today:

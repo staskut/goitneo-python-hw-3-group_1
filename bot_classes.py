@@ -6,19 +6,34 @@ from utils import get_birthdays_per_week
 
 class Field:
     def __init__(self, value):
-        self.value = value
+        self._value = value
 
     def __str__(self):
-        return str(self.value)
+        return str(self._value)
+
+    @property
+    def value(self):
+        return self._value
 
 class Name(Field):
     pass
 
 class Birthday(Field):
     @input_error
-    def __init__(self, date, value):
+    def __init__(self, value):
+        if not re.fullmatch(r"\d{2}\.\d{2}\.\d{4}", value):
+            raise ValueError("Birthday must follow DD.MM.YYYY format")
         super().__init__(value)
-        self.date = date
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        if not re.fullmatch(r"\d{2}\.\d{2}\.\d{4}", value):
+            raise ValueError("Birthday must follow DD.MM.YYYY format")
+        self._value = value
 
 class Phone(Field):
     @input_error
@@ -36,9 +51,6 @@ class Record:
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
 
-    def add_birthday(self, birth_date):
-        self.birthday = birth_date
-
     def remove_phone(self, phone):
         self.phones = [p for p in self.phones if p.value != phone]
 
@@ -53,12 +65,22 @@ class Record:
                 return p
         return None
 
+    def add_birthday(self, birth_date):
+        self.birthday = Birthday(birth_date)
+
+    def get_birthday(self):
+        return str(self.birthday)
+
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
 
 class AddressBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
+
+    def add_birthday(self, name, birth_date):
+        if name in self.data:
+            self.data[name].add_birthday(birth_date)
 
     def find(self, name):
         return self.data.get(name)
@@ -67,5 +89,5 @@ class AddressBook(UserDict):
         if name in self.data:
             del self.data[name]
 
-    def get_birthdays(self):
+    def get_birthdays_per_week(self):
         return get_birthdays_per_week(self.data)

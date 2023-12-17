@@ -5,11 +5,11 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except ValueError:
-            return "Give me name and phone please."
+            return None
         except KeyError:
-            return "Contact not found."
+            return None
         except IndexError:
-            return "Invalid command format."
+            return None
 
     return inner
 
