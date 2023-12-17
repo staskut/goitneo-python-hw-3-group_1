@@ -1,6 +1,8 @@
 from collections import UserDict
 import re
 
+from errors_handler import input_error
+
 class Field:
     def __init__(self, value):
         self.value = value
@@ -12,11 +14,13 @@ class Name(Field):
     pass
 
 class Birthday(Field):
+    @input_error
     def __init__(self, date, value):
         super().__init__(value)
         self.date = date
 
 class Phone(Field):
+    @input_error
     def __init__(self, value):
         if not re.fullmatch(r"\d{10}", value):
             raise ValueError("Phone number must be 10 digits")
