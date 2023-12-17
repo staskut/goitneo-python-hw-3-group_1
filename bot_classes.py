@@ -11,6 +11,11 @@ class Field:
 class Name(Field):
     pass
 
+class Birthday(Field):
+    def __init__(self, date, value):
+        super().__init__(value)
+        self.date = date
+
 class Phone(Field):
     def __init__(self, value):
         if not re.fullmatch(r"\d{10}", value):
@@ -21,9 +26,13 @@ class Record:
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
+        self.birthday = None
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
+
+    def add_birthday(self, birth_date):
+        self.birthday = birth_date
 
     def remove_phone(self, phone):
         self.phones = [p for p in self.phones if p.value != phone]
