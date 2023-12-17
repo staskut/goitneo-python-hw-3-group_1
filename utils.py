@@ -26,11 +26,7 @@ def get_birthdays_per_week(users):
             weekday_name = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
             birthdays[weekday_name[birthday_day]].append(name)
 
-
-
-
-    for day, names in birthdays.items():
-        print(f"{day}: {', '.join(names)}")
+    return birthdays
 
 
 
@@ -44,4 +40,4 @@ if __name__=="__main__":
         {"name": "Kim Kardashian", "birthday": datetime(1980, 10, 21)}
     ]
 
-    get_birthdays_per_week(users_example)
+    print(get_birthdays_per_week(users_example))

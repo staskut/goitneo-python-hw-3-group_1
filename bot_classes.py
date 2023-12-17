@@ -2,6 +2,7 @@ from collections import UserDict
 import re
 
 from errors_handler import input_error
+from utils import get_birthdays_per_week
 
 class Field:
     def __init__(self, value):
@@ -65,3 +66,6 @@ class AddressBook(UserDict):
     def delete(self, name):
         if name in self.data:
             del self.data[name]
+
+    def get_birthdays(self):
+        return get_birthdays_per_week(self.data)
